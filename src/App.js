@@ -1,0 +1,39 @@
+import React, {Component} from "react";
+import Timer from "./Timer";
+import uuid from "uuid/v1";
+
+class App extends Component {
+  state={
+    timers: []
+  }
+
+  createTimer = (name)=>{
+    this.setState({ timers: [{id: uuid(),name}, ...this.state.timers]});
+  }
+
+  removeTimer = id =>{
+    this.setState({timers: this.state.timers.filter(t=> t.id !== id)})
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="create-timer">
+         <input type="text" placeholder="Title" onKeyUp={(e)=>{
+           if(e.keyCode===13){
+              this.createTimer(e.target.value);
+              e.target.value=""
+           }
+         }}/>
+        </div>
+        <div className="timer-bench">
+          {
+            this.state.timers.map(t=> (<Timer name={t.name} key={t.id} remove={()=>this.removeTimer(t.id)}/>))
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
